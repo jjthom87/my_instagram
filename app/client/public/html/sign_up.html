@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Sign Up Page</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="./public/css/sign_up.css">
+</head>
+<body>
+	<div class="container">
+		<h3>If you don't have an account, please Sign Up here</h3>
+		<div class="well">
+			<form id="post-form">
+				<label>Name</label><br>
+				<input type="text" id="name-input"/><br>
+				<label>Username</label><br>
+				<input type="text" id="username-input"/><br>
+				<label>Password</label><br>
+				<input type="password" id="password-input"/><br><br>
+				<input class="btn btn-danger" type="submit">
+			</form>
+		</div>
+		<div class="direct-buttons">
+			<div class="btn-group" role="group" aria-label="Basic example">
+			  <a href="/" type="button" class="btn btn-primary sign-buttons">
+			  	<span class="glyphicon glyphicon-home" aria-hidden="true"></span>
+			  </a>
+			  <a href="/sign-in" type="button" class="btn btn-info sign-buttons">Sign In</a>
+			</div>
+		</div>
+	</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="./public/js/sign_up.js"></script>
+</body>
+</html>

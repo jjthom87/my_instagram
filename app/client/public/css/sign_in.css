@@ -1,0 +1,13 @@
+h1 {
+	color: blue;
+	font-size: 36px;
+}
+
+.sign-buttons{
+	padding: 18px;
+	margin: 5px;
+}
+
+.direct-buttons {
+	margin-top: 10px;
+}

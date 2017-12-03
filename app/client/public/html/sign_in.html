@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Sign In Page</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="./public/css/sign_in.css">
+</head>
+<body>
+	<div class="container">
+		<h3>If you have an account, please Sign In Here</h3>
+		<div class="well">
+			<form id="sign-in-form">
+				<label>Username</label><br>
+				<input type="text" id="username-input"/><br>
+				<label>Password</label><br>
+				<input type="password" id="password-input"/><br><br>
+				<input class="btn btn-danger" type="submit">
+			</form>
+		</div>
+		<div class="direct-buttons">
+			<div class="btn-group" role="group" aria-label="Basic example">
+			  <a href="/" type="button" class="btn btn-primary sign-buttons">
+			  	<span class="glyphicon glyphicon-home" aria-hidden="true"></span>
+			  </a>
+			  <a href="/sign-up" type="button" class="btn btn-info sign-buttons">Sign Up</a>
+			</div>
+		</div>
+	</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="./public/js/sign_in.js"></script>
+</body>
+</html>
