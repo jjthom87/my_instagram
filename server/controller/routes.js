@@ -2,13 +2,17 @@ var pg = require('pg');
 var fs = require('fs');
 var multer = require('multer');
 
-var dbUrl = {
-	user: process.argv.POSTGRES_USER,
-	password: process.argv.POSTGRES_PASSWORD,
-	database: 'pg_pass',
-	host: 'localhost',
-	port: 5432
-};
+if(process.env.DATABASE_URL){
+	dbUrl = process.env.DATABASE_URL
+} else {
+	dbUrl = {
+		user: process.argv.POSTGRES_USER,
+		password: process.argv.POSTGRES_PASSWORD,
+		database: 'pg_pass',
+		host: 'localhost',
+		port: 5432
+	};
+}
 
 var pgClient = new pg.Client(dbUrl);
 

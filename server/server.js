@@ -15,6 +15,13 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.text());
 app.use(bodyParser.json({ type: 'application/vnd.api+json'}));
 
+var dbUrl;
+if(process.env.DATABASE_URL){
+	dbUrl = process.env.DATABASE_URL
+} else {
+	dbUrl = "postgres://jaredthomas:''@localhost:5432/pg_pass"
+}
+
 app.use(cookieParser())
 app.set('trust proxy', 1)
 app.use(session({
@@ -22,7 +29,7 @@ app.use(session({
   resave : true,
   saveUninitialized : false,
   store : new PostgreSqlStore({
-    conString: "postgres://jaredthomas:''@localhost:5432/pg_pass"
+    conString: dbUrl
   })
 }))
 app.use(passport.initialize());
