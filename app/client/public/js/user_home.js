@@ -4,12 +4,11 @@ $(document).ready(function(){
 		e.preventDefault();
 		
 		$.ajax({
-			method: 'GET',
+			method: 'DELETE',
 			url: '/api/logout-user'
 		}).then(function(res){
-			console.log(res)
 			window.location.href = "/"
-		})
+		});
 	});
 
 	$('#file-form').on('submit', function(e) {

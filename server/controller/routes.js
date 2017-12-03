@@ -160,7 +160,7 @@ router.get('/profile/:id', (req,res) => {
 	}
 });
 
-router.get('/api/logout-user', function (req, res) {
+router.delete('/api/logout-user', function (req, res) {
   req.session.destroy(function(out){
     res.json(out)
   });
