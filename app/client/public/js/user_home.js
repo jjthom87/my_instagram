@@ -6,8 +6,10 @@ $(document).ready(function(){
 		$.ajax({
 			method: 'GET',
 			url: '/api/logout-user'
-		});
-		window.location.href = "/"
+		}).then(function(res){
+			console.log(res)
+			window.location.href = "/"
+		})
 	});
 
 	$('#file-form').on('submit', function(e) {
