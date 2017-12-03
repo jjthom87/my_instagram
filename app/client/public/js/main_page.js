@@ -36,7 +36,9 @@ $(document).ready(function(){
 			method: 'DELETE',
 			url: '/api/logout-user'
 		}).then(function(res){
-			window.location.href = "/sign-in"
+			if(res.message === "logout successful"){
+				window.location.href = "/sign-in"
+			}
 		});
 	});
 

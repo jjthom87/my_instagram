@@ -162,7 +162,7 @@ router.get('/profile/:id', (req,res) => {
 
 router.delete('/api/logout-user', function (req, res) {
   req.session.destroy(function(out){
-    res.json(out)
+    res.json({message: "logout successful"})
   });
 });
 
