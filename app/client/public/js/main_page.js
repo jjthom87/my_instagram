@@ -14,7 +14,6 @@ $(document).ready(function(){
 				aProfile.addClass('btn btn-success sign-buttons');
 				var aLogout = $('<a>',{
 					type: 'button',
-					href: '/api/logout-user',
 					text: 'Logout',
 					id: 'main-page-logout-button'
 				});
