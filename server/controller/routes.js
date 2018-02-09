@@ -173,39 +173,6 @@ router.delete('/api/logout-user', function (req, res) {
 
 var storage = multer.diskStorage({
     destination: function(req, file, callback){
-    	//const s3 = new aws.S3();
-		// const s3Params = {
-		// 	Bucket: S3_BUCKET,
-		// 	Key: file.originalname,
-		// 	Expires: 60,
-		// 	ContentType: '.png',
-		// 	ACL: 'public-read'
-		// };
-		// s3.getSignedUrl('putObject', s3Params, (err, data) => {
-		// 	if(err){
-		//   		console.log(err);
-		//   		return res.end();
-		// 	}
-		// 	const returnData = {
-		//   		signedRequest: data,
-		//   		url: `https://${S3_BUCKET}.s3.amazonaws.com/${req.user.username}/${file.originalname}`
-		// 	};
-		// 	console.log(returnData)
-		// });
-		// var params = {Bucket: S3_BUCKET, Key: '', Body: ''};
-		// var fs = require('fs');
-		// var fileStream = fs.createReadStream(file);
-		// fileStream.on('error', function(err) {
-		//   console.log('File Error', err);
-		// });
-		// params.Body = fileStream;
-
-		// var path = require('path');
-		// params.Key = path.basename(file);
-		// s3.upload(params, function(err, data) {
-		//   console.log(err, data);
-		// });
-    	// callback(null, `https://${S3_BUCKET}.s3.amazonaws.com/${req.user.username}`);
     	callback(null, './app/client/public/images/' + req.user.username);
     },
     filename: function(req, file, callback){
