@@ -1,6 +1,7 @@
 var pg = require('pg');
 var fs = require('fs');
 var multer = require('multer');
+var path = require('path');
 
 if(process.env.DATABASE_URL){
 	dbUrl = process.env.DATABASE_URL
@@ -31,6 +32,7 @@ var html_creator = require('../helpers/html_creator.js');
 
 const aws = require('aws-sdk');
 const S3_BUCKET = process.env.S3_BUCKET;
+const AWS_SECRET_ACCESS_KEY=process.env.AWS_SECRET_ACCESS_KEY;
 
 passport.serializeUser(function(user,done){
 	done(null, user);
@@ -171,26 +173,40 @@ router.delete('/api/logout-user', function (req, res) {
 
 var storage = multer.diskStorage({
     destination: function(req, file, callback){
-    	const s3 = new aws.S3();
-		const s3Params = {
-			Bucket: S3_BUCKET,
-			Key: file.originalname,
-			Expires: 60,
-			ContentType: '.png',
-			ACL: 'public-read'
-		};
-		s3.getSignedUrl('putObject', s3Params, (err, data) => {
-			if(err){
-		  		console.log(err);
-		  		return res.end();
-			}
-			const returnData = {
-		  		signedRequest: data,
-		  		url: `https://${S3_BUCKET}.s3.amazonaws.com/${req.user.username}/${file.originalname}`
-			};
-			console.log(returnData)
-		});
-    	//callback(null, `https://${S3_BUCKET}.s3.amazonaws.com/${req.user.username}`);
+    	//const s3 = new aws.S3();
+		// const s3Params = {
+		// 	Bucket: S3_BUCKET,
+		// 	Key: file.originalname,
+		// 	Expires: 60,
+		// 	ContentType: '.png',
+		// 	ACL: 'public-read'
+		// };
+		// s3.getSignedUrl('putObject', s3Params, (err, data) => {
+		// 	if(err){
+		//   		console.log(err);
+		//   		return res.end();
+		// 	}
+		// 	const returnData = {
+		//   		signedRequest: data,
+		//   		url: `https://${S3_BUCKET}.s3.amazonaws.com/${req.user.username}/${file.originalname}`
+		// 	};
+		// 	console.log(returnData)
+		// });
+		// var params = {Bucket: S3_BUCKET, Key: '', Body: ''};
+		// var fs = require('fs');
+		// var fileStream = fs.createReadStream(file);
+		// fileStream.on('error', function(err) {
+		//   console.log('File Error', err);
+		// });
+		// params.Body = fileStream;
+
+		// var path = require('path');
+		// params.Key = path.basename(file);
+		// s3.upload(params, function(err, data) {
+		//   console.log(err, data);
+		// });
+    	// callback(null, `https://${S3_BUCKET}.s3.amazonaws.com/${req.user.username}`);
+    	callback(null, './app/client/public/images/' + req.user.username);
     },
     filename: function(req, file, callback){
         callback(null, file.originalname);
@@ -199,14 +215,31 @@ var storage = multer.diskStorage({
 var upload = multer({storage: storage});
 
 router.post('/fileupload', upload.single('myFile'), (req,res) => {
-	res.json({result: "Image Uploaded"})
+	const s3 = new aws.S3();
+	var params = {Bucket: S3_BUCKET, Key: '', Body: ''};
+	var fileStream = fs.createReadStream(path.join(__dirname, '../../app/client/public/images/' + req.user.username + "/" + req.file.originalname));
+	fileStream.on('error', function(err) {
+	  console.log('File Error', err);
+	});
+	params.Body = fileStream;
+
+	params.Key = req.user.username + "/" + req.file.originalname;
+	s3.upload(params, function(err, data) {
+		if(err){
+			res.json({error: err})
+		} else {
+			res.json({result: "Image Uploaded", data: data})
+		}
+	});
 });
 
 router.get('/images', function(req,res){
 	if(req.user){
 		var images = []
 		fs.readdirSync(path.join(__dirname, '../../app/client/public/images/' + req.user.username)).forEach((name) => {
-			images.push(name)
+			if(name.charAt(0) !== "."){
+				images.push(name)
+			}
 		});
 		res.json({images: images, user: req.user.username})
 	} else {
