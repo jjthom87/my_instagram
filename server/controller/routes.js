@@ -3,6 +3,8 @@ var fs = require('fs');
 var multer = require('multer');
 var path = require('path');
 
+const { exec } = require('child_process');
+
 if(process.env.DATABASE_URL){
 	dbUrl = process.env.DATABASE_URL
 } else {
@@ -33,6 +35,7 @@ var html_creator = require('../helpers/html_creator.js');
 const aws = require('aws-sdk');
 const S3_BUCKET = process.env.S3_BUCKET;
 const AWS_SECRET_ACCESS_KEY=process.env.AWS_SECRET_ACCESS_KEY;
+const s3 = new aws.S3();
 
 passport.serializeUser(function(user,done){
 	done(null, user);
@@ -182,7 +185,6 @@ var storage = multer.diskStorage({
 var upload = multer({storage: storage});
 
 router.post('/fileupload', upload.single('myFile'), (req,res) => {
-	const s3 = new aws.S3();
 	var params = {Bucket: S3_BUCKET, Key: '', Body: ''};
 	var fileStream = fs.createReadStream(path.join(__dirname, '../../app/client/public/images/' + req.user.username + "/" + req.file.originalname));
 	fileStream.on('error', function(err) {
@@ -196,19 +198,33 @@ router.post('/fileupload', upload.single('myFile'), (req,res) => {
 			res.json({error: err})
 		} else {
 			res.json({result: "Image Uploaded", data: data})
+			exec('rm -rf ' + path.join(__dirname, '../../app/client/public/images/*'), (err, stdout, stderr) => {
+			  if (err) {
+			    return;
+			  }
+			});
 		}
 	});
 });
 
 router.get('/images', function(req,res){
 	if(req.user){
-		var images = []
-		fs.readdirSync(path.join(__dirname, '../../app/client/public/images/' + req.user.username)).forEach((name) => {
-			if(name.charAt(0) !== "."){
-				images.push(name)
-			}
+		s3.listObjects({Bucket: S3_BUCKET}, function(err, data) {
+			var images = []
+		    if (err) {
+		      console.log("Error", err);
+		    } else {
+		   	  	data.Contents.forEach((image) => {
+			   	  	if(image.Key.split("/")[0] === req.user.username){
+			   	  		images.push(image.Key.split("/")[1])
+						// var params = {Bucket: S3_BUCKET, Key: image.Key};
+						// var file = require('fs').createWriteStream(path.join(__dirname, '../../app/client/public/images/' + image.Key));
+						// s3.getObject(params).createReadStream().pipe(file);
+			   	  	}
+		   	  	})
+		   	  	res.json({images: images, user: req.user.username, bucket: S3_BUCKET})
+		    }
 		});
-		res.json({images: images, user: req.user.username})
 	} else {
 		res.redirect("/")
 	}

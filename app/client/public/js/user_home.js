@@ -42,7 +42,7 @@ $(document).ready(function(){
 				img = $('<img>',{
 					height: 125,
 					width: 'auto',
-					src: '../public/images/' + res.user + '/' + res.images[i]
+					src: 'https://s3-us-west-2.amazonaws.com/' + res.bucket + '/' + res.user + '/' + res.images[i] + ''
 				});
 				imageDiv.append(img)
 				$('#images-div').append(imageDiv)

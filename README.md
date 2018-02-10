@@ -9,3 +9,5 @@ On the live heroku app, you will see that the pictures get deleted after some ti
 https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/s3-example-creating-buckets.html
 
 https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#upload-property
+
+https://stackoverflow.com/questions/2547046/make-a-bucket-public-in-amazon-s3
